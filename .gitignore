@@ -44,7 +44,7 @@ checkpoints/
 # Dataset
 data/
 datasets/
-*.csv
+
 !results/*.csv
 
 # Logs
