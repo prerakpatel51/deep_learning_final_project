@@ -1,0 +1,58 @@
+# Data Configuration
+data:
+  raw_dataset_name: "farjanakabirsamanta/skin-cancer-dataset"
+  processed_dir: "data/processed"
+  target_per_class: 400
+  image_size: [360, 360]
+  num_workers: 4
+  test_split: 0.1
+  val_split: 0.1
+
+# Training Configuration
+training:
+  num_epochs: 50
+  patience: 10
+  seed: 42
+  batch_size: 32 # Default batch size, can be overridden by specific configs
+
+# Model Configurations
+# Each config in the list will be run for every model type
+model_configs:
+  - id: 1
+    lr: 1.0e-3
+    batch_size: 32
+    optimizer: "Adam"
+    dropout: 0.5
+    weight_decay: 1.0e-4
+  
+  - id: 2
+    lr: 1.0e-4
+    batch_size: 32
+    optimizer: "Adam"
+    dropout: 0.5
+    weight_decay: 1.0e-2
+
+  - id: 3
+    lr: 1.0e-4
+    batch_size: 64
+    optimizer: "RMSprop"
+    dropout: 0.3
+    weight_decay: 1.0e-4
+
+  - id: 4
+    lr: 1.0e-5
+    batch_size: 16
+    optimizer: "RMSprop"
+    dropout: 0.7
+    weight_decay: 1.0e-2
+
+# Models to train
+models:
+  - name: "resnet50"
+    pretrained: true
+  - name: "vgg16"
+    pretrained: true
+  - name: "resnet50"
+    pretrained: false
+  - name: "vgg16"
+    pretrained: false

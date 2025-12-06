@@ -1,0 +1,11 @@
+# 1. Train models (using settings from config.yaml)
+srun --partition=gpu2 --mem=250GB --cpus-per-task=40 /home1/ppatel2025/miniconda3/envs/tito_env/bin/python data_and_train.py
+
+# 1a. Train models (overriding config settings with CLI arguments)
+srun --partition=gpu2 --mem=250GB --cpus-per-task=40 /home1/ppatel2025/miniconda3/envs/tito_env/bin/python data_and_train.py --target_per_class 400 --num_epochs 50
+
+# 2. Visualize dataset (class distributions and sample grids)
+srun --partition=gpu2 --mem=250GB --cpus-per-task=40 /home1/ppatel2025/miniconda3/envs/tito_env/bin/python visualize_dataset.py
+
+# 3. Evaluate trained models (metrics and plots)
+srun --partition=gpu2 --mem=250GB --cpus-per-task=40 /home1/ppatel2025/miniconda3/envs/tito_env/bin/python evaluate_models.py

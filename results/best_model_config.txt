@@ -1,0 +1,5 @@
+BEST MODEL CONFIGURATION
+Model: resnet50
+Pretrained: True
+Config ID: 2
+Metrics: {'acc': 0.7694610778443114, 'f1': 0.6976196287677221, 'auc': 0.9580322998003944}
