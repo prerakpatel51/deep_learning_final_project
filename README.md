@@ -323,10 +323,10 @@ All visualizations are saved to the `visualizations/` directory.
 ## Training Time
 
 Approximate training time per model configuration:
-- **With GPU**: 30-60 minutes
+- **With GPU**: 120-130 minutes
 - **Without GPU**: 6-12 hours
 
-Total training time for all 16 configurations: 8-16 hours (GPU)
+Total training time for all 16 configurations: 32 hours (GPU)
 
 ## Reproducibility
 
@@ -376,12 +376,12 @@ For questions or collaboration:
 If you use this code or approach, please cite:
 ```
 Skin Lesion Classification using Deep Learning
-Author: Patel P.
+Author: Patel Prerak and Keval Patel.
 Year: 2025
-Institution: [Your Institution]
+Institution: Florida Institute of Technology
 ```
 
 ---
 
 **Note**: This is an educational project and should not be used for actual medical diagnosis without proper validation and regulatory approval.
-# deep_learning_final_project
+
