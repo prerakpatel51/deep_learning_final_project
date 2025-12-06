@@ -48,8 +48,7 @@ datasets/
 !results/*.csv
 
 # Logs
-logs/
-*.log
+
 log_slurm/
 slurm-*.out
 
