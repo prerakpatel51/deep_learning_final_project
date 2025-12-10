@@ -36,6 +36,10 @@ df_best = pd.read_csv(best_model_path)
 best_test_path = os.path.join(logs_dir, best_test_model_file)
 df_best_test = pd.read_csv(best_test_path)
 
+# Check if F1 scores are available
+has_f1_best = 'train_f1' in df_best.columns and 'val_f1' in df_best.columns
+has_f1_test = 'train_f1' in df_best_test.columns and 'val_f1' in df_best_test.columns
+
 # ========== PLOT 1: Loss Curves for Best Model (Config 2) ==========
 fig1, ax1 = plt.subplots(figsize=(12, 7))
 
@@ -183,6 +187,68 @@ plt.tight_layout()
 acc_output_test = os.path.join(logs_dir, 'highest_test_acc_model_accuracy_curve.png')
 plt.savefig(acc_output_test, dpi=300, bbox_inches='tight')
 print(f"Highest test accuracy model accuracy plot saved to: {acc_output_test}")
+
+# ========== PLOT 5: F1 Score Curves for Best Model (Config 2) - If Available ==========
+if has_f1_best:
+    fig5, ax5 = plt.subplots(figsize=(12, 7))
+
+    ax5.plot(df_best['epoch'], df_best['train_f1'],
+             label='Train F1 Score',
+             color='purple',
+             linewidth=2.5,
+             marker='o',
+             markersize=4)
+    ax5.plot(df_best['epoch'], df_best['val_f1'],
+             label='Validation F1 Score',
+             color='magenta',
+             linewidth=2.5,
+             marker='s',
+             markersize=4)
+
+    ax5.set_xlabel('Epoch', fontsize=14)
+    ax5.set_ylabel('Macro F1 Score', fontsize=14)
+
+    ax5.set_title(f'ResNet50 Pretrained Config 2 - F1 Score Curves\n(Best Overall Model) Config 2: LR={config2_details['lr']}, Batch={config2_details['batch_size']}, Optimizer={config2_details['optimizer']}, Dropout={config2_details['dropout']}, Weight Decay={config2_details['weight_decay']}',
+                  fontsize=16, fontweight='bold', pad=30)
+    ax5.legend(fontsize=12)
+    ax5.grid(True, alpha=0.3)
+    plt.tight_layout()
+
+    # Save F1 plot
+    f1_output = os.path.join(logs_dir, 'best_model_f1_curve.png')
+    plt.savefig(f1_output, dpi=300, bbox_inches='tight')
+    print(f"Best model F1 plot saved to: {f1_output}")
+
+# ========== PLOT 6: F1 Score Curves for Highest Test Accuracy Model (Config 3) - If Available ==========
+if has_f1_test:
+    fig6, ax6 = plt.subplots(figsize=(12, 7))
+
+    ax6.plot(df_best_test['epoch'], df_best_test['train_f1'],
+             label='Train F1 Score',
+             color='purple',
+             linewidth=2.5,
+             marker='o',
+             markersize=4)
+    ax6.plot(df_best_test['epoch'], df_best_test['val_f1'],
+             label='Validation F1 Score',
+             color='magenta',
+             linewidth=2.5,
+             marker='s',
+             markersize=4)
+
+    ax6.set_xlabel('Epoch', fontsize=14)
+    ax6.set_ylabel('Macro F1 Score', fontsize=14)
+
+    ax6.set_title(f'ResNet50 Pretrained Config 3 - F1 Score Curves\n(Highest Test Accuracy: 81.44%) Config 3: LR={config3_details['lr']}, Batch={config3_details['batch_size']}, Optimizer={config3_details['optimizer']}, Dropout={config3_details['dropout']}, Weight Decay={config3_details['weight_decay']}',
+                  fontsize=14, fontweight='bold', pad=10)
+    ax6.legend(fontsize=10)
+    ax6.grid(True, alpha=0.3)
+    plt.tight_layout()
+
+    # Save F1 plot
+    f1_output_test = os.path.join(logs_dir, 'highest_test_acc_model_f1_curve.png')
+    plt.savefig(f1_output_test, dpi=300, bbox_inches='tight')
+    print(f"Highest test accuracy model F1 plot saved to: {f1_output_test}")
 
 print("\nSummary:")
 print(f"Best Overall Model (Config 2) - Test Acc: 76.95%, AUC: 0.958")

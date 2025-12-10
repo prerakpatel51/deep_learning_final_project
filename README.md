@@ -58,9 +58,10 @@ The dataset exhibits severe class imbalance. A custom balancing strategy was imp
 - **Data Augmentation**: Random flips, rotation, color jitter
 - **Hyperparameter Search**: 4 different configurations per model
 - **Early Stopping**: Prevents overfitting with patience-based stopping
-- **Comprehensive Logging**: Training metrics saved to CSV
-- **Rich Visualizations**: Confusion matrices, ROC curves, training histories
+- **Comprehensive Logging**: Training metrics saved to CSV (loss, accuracy, **macro F1 score**)
+- **Rich Visualizations**: Confusion matrices, ROC curves, training histories (loss, accuracy, **F1 score**)
 - **GPU Support**: CUDA acceleration with multi-GPU support via DataParallel
+- **F1 Score Tracking**: Real-time macro F1 score computation during training and validation
 
 ## Installation
 
@@ -146,19 +147,30 @@ This will:
 
 ### 5. Plot Training Curves
 
-Visualize training/validation curves for all models:
+Visualize training/validation curves for all models (loss, accuracy, and F1 scores):
 
 ```bash
 python plot_training_curves.py
 ```
 
+Output:
+- `logs/all_models_loss_curves.png` - Loss curves for all 16 models
+- `logs/all_models_accuracy_curves.png` - Accuracy curves for all 16 models
+- `logs/all_models_f1_curves.png` - F1 score curves for all 16 models (if available)
+
 ### 6. Analyze Best Model
 
-Generate detailed visualizations for the best model:
+Generate detailed visualizations for the best performing models:
 
 ```bash
 python plot_best_model.py
 ```
+
+Output:
+- `logs/best_model_loss_curve.png`
+- `logs/best_model_accuracy_curve.png`
+- `logs/best_model_f1_curve.png` (if F1 data available)
+- `logs/highest_test_acc_model_*.png` (similar plots for highest accuracy model)
 
 ## Project Structure
 
@@ -185,7 +197,9 @@ final_project_deeplearining/
 │   └── *_epoch*.pth          # Epoch checkpoints
 │
 ├── logs/                      # Training logs
-│   └── *_training_log.csv    # CSV logs with epoch metrics
+│   ├── *_training_log.csv    # CSV logs (epoch, train_loss, train_acc, train_f1, val_loss, val_acc, val_f1)
+│   ├── all_models_*_curves.png  # Aggregate training curves (loss, accuracy, F1)
+│   └── best_model_*.png      # Best model training curves
 │
 ├── results/                   # Evaluation results
 │   ├── model_evaluation_summary.csv
@@ -298,13 +312,16 @@ The project generates extensive visualizations:
 ### Training Analysis
 - Training/validation loss curves
 - Training/validation accuracy curves
+- **Training/validation macro F1 score curves** (new!)
+- Aggregate comparison plots for all 16 model configurations
 
 ### Model Evaluation
 - Confusion matrices (per model)
 - ROC curves with AUC scores (per model, per class)
 - Model comparison bar charts (F1, Accuracy)
+- Training history plots with 3 metrics (Loss, Accuracy, F1 Score)
 
-All visualizations are saved to the `visualizations/` directory.
+All visualizations are saved to the `visualizations/` and `logs/` directories.
 
 ## Hardware Requirements
 

@@ -78,27 +78,60 @@ def plot_training_history(log_file, save_path):
         return
 
     df = pd.read_csv(log_file)
-    
-    plt.figure(figsize=(12, 5))
-    
-    # Loss
-    plt.subplot(1, 2, 1)
-    plt.plot(df['epoch'], df['train_loss'], label='Train Loss')
-    plt.plot(df['epoch'], df['val_loss'], label='Val Loss')
-    plt.xlabel('Epoch')
-    plt.ylabel('Loss')
-    plt.title('Training and Validation Loss')
-    plt.legend()
-    
-    # Accuracy
-    plt.subplot(1, 2, 2)
-    plt.plot(df['epoch'], df['train_acc'], label='Train Acc')
-    plt.plot(df['epoch'], df['val_acc'], label='Val Acc')
-    plt.xlabel('Epoch')
-    plt.ylabel('Accuracy')
-    plt.title('Training and Validation Accuracy')
-    plt.legend()
-    
+
+    # Check if F1 scores are available in the log file
+    has_f1 = 'train_f1' in df.columns and 'val_f1' in df.columns
+
+    if has_f1:
+        plt.figure(figsize=(18, 5))
+
+        # Loss
+        plt.subplot(1, 3, 1)
+        plt.plot(df['epoch'], df['train_loss'], label='Train Loss')
+        plt.plot(df['epoch'], df['val_loss'], label='Val Loss')
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.title('Training and Validation Loss')
+        plt.legend()
+
+        # Accuracy
+        plt.subplot(1, 3, 2)
+        plt.plot(df['epoch'], df['train_acc'], label='Train Acc')
+        plt.plot(df['epoch'], df['val_acc'], label='Val Acc')
+        plt.xlabel('Epoch')
+        plt.ylabel('Accuracy')
+        plt.title('Training and Validation Accuracy')
+        plt.legend()
+
+        # F1 Score
+        plt.subplot(1, 3, 3)
+        plt.plot(df['epoch'], df['train_f1'], label='Train F1')
+        plt.plot(df['epoch'], df['val_f1'], label='Val F1')
+        plt.xlabel('Epoch')
+        plt.ylabel('Macro F1 Score')
+        plt.title('Training and Validation F1 Score')
+        plt.legend()
+    else:
+        plt.figure(figsize=(12, 5))
+
+        # Loss
+        plt.subplot(1, 2, 1)
+        plt.plot(df['epoch'], df['train_loss'], label='Train Loss')
+        plt.plot(df['epoch'], df['val_loss'], label='Val Loss')
+        plt.xlabel('Epoch')
+        plt.ylabel('Loss')
+        plt.title('Training and Validation Loss')
+        plt.legend()
+
+        # Accuracy
+        plt.subplot(1, 2, 2)
+        plt.plot(df['epoch'], df['train_acc'], label='Train Acc')
+        plt.plot(df['epoch'], df['val_acc'], label='Val Acc')
+        plt.xlabel('Epoch')
+        plt.ylabel('Accuracy')
+        plt.title('Training and Validation Accuracy')
+        plt.legend()
+
     plt.tight_layout()
     plt.savefig(save_path)
     plt.close()

@@ -1,11 +1,45 @@
+# =============================================================================
+# TRAINING WORKFLOW
+# =============================================================================
+
 # 1. Train models (using settings from config.yaml)
+# Logs train/val loss, accuracy, and macro F1 score to CSV files for each model+config
+# Output: checkpoints/*.pth, logs/*_training_log.csv (with epoch, train_loss, train_acc, train_f1, val_loss, val_acc, val_f1)
 srun --partition=gpu2 --mem=250GB --cpus-per-task=40 /home1/ppatel2025/miniconda3/envs/tito_env/bin/python data_and_train.py
 
 # 1a. Train models (overriding config settings with CLI arguments)
 srun --partition=gpu2 --mem=250GB --cpus-per-task=40 /home1/ppatel2025/miniconda3/envs/tito_env/bin/python data_and_train.py --target_per_class 400 --num_epochs 50
 
+# =============================================================================
+# VISUALIZATION & EVALUATION
+# =============================================================================
+
 # 2. Visualize dataset (class distributions and sample grids)
 srun --partition=gpu2 --mem=250GB --cpus-per-task=40 /home1/ppatel2025/miniconda3/envs/tito_env/bin/python visualize_dataset.py
 
 # 3. Evaluate trained models (metrics and plots)
+# Generates confusion matrices, ROC curves, and training history plots (Loss, Accuracy, F1 Score)
+# Output: results/model_evaluation_summary.csv, visualizations/*.png (cm_*, roc_*, history_*)
 srun --partition=gpu2 --mem=250GB --cpus-per-task=40 /home1/ppatel2025/miniconda3/envs/tito_env/bin/python evaluate_models.py
+
+# =============================================================================
+# PLOTTING SCRIPTS
+# =============================================================================
+
+# 4. Plot training curves for all models (16 models)
+# Generates 3 plots: Loss curves, Accuracy curves, F1 Score curves (if available)
+# Output: logs/all_models_loss_curves.png, logs/all_models_accuracy_curves.png, logs/all_models_f1_curves.png
+python plot_training_curves.py
+
+# 5. Plot training curves for best models (Config 2 and Config 3)
+# Generates Loss, Accuracy, and F1 Score plots for the two best models
+# Output: logs/best_model_*.png, logs/highest_test_acc_model_*.png
+python plot_best_model.py
+
+# =============================================================================
+# NOTES
+# =============================================================================
+# - CSV logs now include macro F1 scores (train_f1, val_f1) for each epoch
+# - All plotting scripts automatically detect and plot F1 scores if available
+# - Backward compatible: works with old CSV files without F1 data
+# - F1 score plots use purple/magenta colors for consistency

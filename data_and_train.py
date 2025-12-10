@@ -11,6 +11,7 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader, WeightedRandomSampler
 from torchvision import transforms, models, datasets
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score
 from PIL import Image
 import kagglehub
 from tqdm import tqdm
@@ -218,6 +219,8 @@ def train_model(model, dataloaders, criterion, optimizer, device, num_epochs, pa
 
             running_loss = 0.0
             running_corrects = 0
+            all_preds = []
+            all_labels = []
 
             # Iterate over data.
             for inputs, labels in tqdm(dataloaders[phase], desc=phase, leave=False):
@@ -238,25 +241,34 @@ def train_model(model, dataloaders, criterion, optimizer, device, num_epochs, pa
                 running_loss += loss.item() * inputs.size(0)
                 running_corrects += torch.sum(preds == labels.data)
 
+                # Collect predictions and labels for F1 calculation
+                all_preds.extend(preds.cpu().numpy())
+                all_labels.extend(labels.cpu().numpy())
+
             epoch_loss = running_loss / len(dataloaders[phase].dataset)
             epoch_acc = running_corrects.double() / len(dataloaders[phase].dataset)
+            epoch_f1 = f1_score(all_labels, all_preds, average='macro')
 
-            print(f'{phase} Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f}')
-            
+            print(f'{phase} Loss: {epoch_loss:.4f} Acc: {epoch_acc:.4f} F1: {epoch_f1:.4f}')
+
             if phase == 'train':
                 train_loss = epoch_loss
                 train_acc = epoch_acc.item()
+                train_f1 = epoch_f1
             else:
                 val_loss = epoch_loss
                 val_acc = epoch_acc.item()
+                val_f1 = epoch_f1
 
         # Logging
         log_data.append({
             'epoch': epoch,
             'train_loss': train_loss,
             'train_acc': train_acc,
+            'train_f1': train_f1,
             'val_loss': val_loss,
-            'val_acc': val_acc
+            'val_acc': val_acc,
+            'val_f1': val_f1
         })
         
         # Save checkpoint
